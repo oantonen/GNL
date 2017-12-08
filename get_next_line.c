@@ -6,7 +6,7 @@
 /*   By: oantonen <oantonen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/02 20:16:45 by oantonen          #+#    #+#             */
-/*   Updated: 2017/12/03 21:31:26 by oantonen         ###   ########.fr       */
+/*   Updated: 2017/12/04 09:53:20 by oantonen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ int get_next_line(const int fd, char **line)
 	while (*tmp && *tmp++ != '\n')
 		len++;
 	if (len > BUFF_SIZE)
-		read(fd, tmp, BUFF_SIZE)
+		read(fd, tmp, BUFF_SIZE);
 	*line = (char*)malloc(sizeof(char) * (BUFF_SIZE + 1));
 	tmp = tmp - len - 1;
 	ft_strncpy(*line, tmp, len);
