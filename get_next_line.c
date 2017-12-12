@@ -6,57 +6,66 @@
 /*   By: oantonen <oantonen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/02 20:16:45 by oantonen          #+#    #+#             */
-/*   Updated: 2017/12/04 09:53:20 by oantonen         ###   ########.fr       */
+/*   Updated: 2017/12/11 19:55:13 by oantonen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 #include <stdio.h>
 #include <string.h>
+#include "libft/includes/libft.h"
 
-// #include <stdlib.h>
-// #include <fcntl.h>
-// #include <unistd.h>
+#define BUFF_SIZE 30
+#define FILE "head"
 
-char	*ft_strncpy(char *dst, const char *src, size_t len)
+t_list	*searchlist(t_list **list, int fd)
 {
-	char *ptr;
+	t_list *tmp = *list;
 
-	ptr = dst;
-	while (len)
+	while (tmp != NULL)
 	{
-		if (!*src)
-			break ;
-		else
-			*ptr++ = *src++;
-		len--;
+		if (tmp->content_size == fd)
+			return (tmp);
+		tmp = tmp->next;
 	}
-	while (len)
+	if (*list == NULL)
 	{
-		*ptr++ = '\0';
-		len--;
+		*list = ft_lstnew(NULL, 0);
+		°list = ft_lstadd(list);
+		*list->content_size = fd;
 	}
-	return (dst);
+	if (tmp == NULL)
+
 }
 
-int get_next_line(const int fd, char **line)
+char	*find_line(char *buf)
 {
-	int		len;
-	char	*tmp;
 
-	len = 0;
-	if (!(tmp = (char*)malloc(sizeof(char) * (BUFF_SIZE + 1))))
+	return (str);
+}
+
+int		get_next_line(const int fd, char **line)
+{
+	static t_list	*file;
+	char			*buf;
+	char			*tmp = NULL;
+	char			*buf_tmp;
+
+	if (fd < 0 || BUFF_SIZE == 0)
 		return (0);
-	if (read(fd, tmp, BUFF_SIZE) == -1)
-		return (-1);
-	tmp[BUFF_SIZE] = '\0';
-	while (*tmp && *tmp++ != '\n')
-		len++;
-	if (len > BUFF_SIZE)
-		read(fd, tmp, BUFF_SIZE);
-	*line = (char*)malloc(sizeof(char) * (BUFF_SIZE + 1));
-	tmp = tmp - len - 1;
-	ft_strncpy(*line, tmp, len);
+	tmp = ft_strnew(BUFF_SIZE);
+	buf = ft_strnew(1);
+	file = searchlist(&file, fd);
+	while (!ft_strchr(tmp, '\n') && read(fd, tmp, BUFF_SIZE) > 0)
+	{
+		buf_tmp = buf;
+		buf = ft_strjoin(buf, tmp);
+		// free(buf_tmp);
+	}
+
+	*line = find_line(buf);
+		
+
 	return (1);
 }
 
@@ -64,16 +73,20 @@ int main()
 {
 	int fp;
 	char *line;
-
-	// line = NULL;
-
-	fp = open(".//test.c", O_RDONLY);
-	// line = (char*)malloc(sizeof(char) * 1500);
-	get_next_line(fp, &line);
-	printf("%s", line);
-	// printf("%s\n", &line[0]);
-	// printf("%s\n", &line[1]);
+	// char b;
+	fp = open(FILE, O_RDONLY);
+	while ((get_next_line(fp, &line)) == 1)
+	{
+		printf("line = %s\n", line);
+	}
+	// while (read(0, &b, 1))
+	// {
+	// 	get_next_line(fp, &line);
+	// 	printf("line = %s\n", line);
+	// }
 
 	return (0);
-
 }
+
+
+
