@@ -15,32 +15,46 @@
 #include <string.h>
 #include "libft/includes/libft.h"
 
-#define BUFF_SIZE 30
-#define FILE "head"
+#define BUFF_SIZE 1000
+#define FILE "one"
 
 t_list	*searchlist(t_list **list, int fd)
 {
-	t_list *tmp = *list;
+	t_list *tmp;
 
+	tmp = *list;
 	while (tmp != NULL)
 	{
-		if (tmp->content_size == fd)
+		if ((int)(tmp->content_size) == fd)
 			return (tmp);
 		tmp = tmp->next;
 	}
-	if (*list == NULL)
-	{
-		*list = ft_lstnew(NULL, 0);
-		°list = ft_lstadd(list);
-		*list->content_size = fd;
-	}
 	if (tmp == NULL)
-
+	{	
+		tmp = ft_lstnew(NULL, 0);
+		tmp->content_size = fd;
+		ft_lstadd(&(*list), tmp);
+	}
+	return (tmp);
 }
 
-char	*find_line(char *buf)
+char	*find_line(t_list *file)
 {
+	char	*str;
+	void	*ptr_buf;
+	int		len;
+	int		ost;
 
+	ptr_buf = file->content;
+	ptr_buf = ft_strchr(file->content, '\n');
+	len = ptr_buf - file->content;
+	str = ft_strsub(file->content, 0, len);
+	ptr_buf = file->content;
+	ost = ft_strlen(&(file->content)[len]);
+	file->content = ft_strsub(file->content, len + 1, ost);
+	free(ptr_buf);
+	printf("str = %s\n", str);
+	// printf("buf = %s\n", file->content);
 	return (str);
 }
 
@@ -56,14 +70,23 @@ int		get_next_line(const int fd, char **line)
 	tmp = ft_strnew(BUFF_SIZE);
 	buf = ft_strnew(1);
 	file = searchlist(&file, fd);
-	while (!ft_strchr(tmp, '\n') && read(fd, tmp, BUFF_SIZE) > 0)
-	{
-		buf_tmp = buf;
-		buf = ft_strjoin(buf, tmp);
-		// free(buf_tmp);
-	}
+	if (file->content != NULL)
+		tmp = ft_strchr(file->content, '\n');
+	if (tmp)
+		while (!ft_strchr(tmp, '\n') && read(fd, tmp, BUFF_SIZE) > 0)
+		{
+			buf_tmp = file->content;
+			if (file->content == NULL)
+			{
+				buf = ft_strsub(tmp, 0, ft_strlen(buf));
+				file->content = buf;
+			}
+			file->content = ft_strjoin(file->content, tmp);
+			free(buf_tmp);
+		}
+	find_line(file);
 
-	*line = find_line(buf);
+	*line = buf;
 		
 
 	return (1);
@@ -75,10 +98,11 @@ int main()
 	char *line;
 	// char b;
 	fp = open(FILE, O_RDONLY);
-	while ((get_next_line(fp, &line)) == 1)
-	{
-		printf("line = %s\n", line);
-	}
+	get_next_line(fp, &line);
+	get_next_line(fp, &line);
+	// {
+		// printf("line = %s\n", line);
+	// }
 	// while (read(0, &b, 1))
 	// {
 	// 	get_next_line(fp, &line);
