@@ -15,8 +15,8 @@
 #include <string.h>
 #include "libft/includes/libft.h"
 
-#define BUFF_SIZE 1000
-#define FILE "head"
+#define BUFF_SIZE 500
+#define FILE "HEAD"
 
 t_list	*searchlist(t_list **list, int fd)
 {
@@ -38,27 +38,50 @@ t_list	*searchlist(t_list **list, int fd)
 	return (tmp);
 }
 
-char	*find_line(t_list *file)
+int		find_line(t_list *file, char **line)
 {
-	char	*str;
+	// char	*str;
 	void	*ptr_buf;
 	int		len;
 	int		ost;
 
+	len = 0;
+	if (ft_strlen(file->content) == 0)
+		return (0);
 	ptr_buf = file->content;
 	ptr_buf = ft_strchr(file->content, '\n');
+	if (ptr_buf == NULL)
+	{
+		*line = ft_strdup(file->content);
+		ft_bzero(file->content, ft_strlen(file->content));
+		return (1);
+	}
 	len = ptr_buf - file->content;
-	str = ft_strsub(file->content, 0, len);
+
+	*line = ft_strsub(file->content, 0, len);
 	ptr_buf = file->content;
 	ost = ft_strlen(&(file->content)[len]);
 	file->content = ft_strsub(file->content, len + 1, ost);
-	free(ptr_buf);
-	if (ft_strlen(file->content) == 0)
-		return (0);
-	// printf("strlen %zu\n", ft_strlen(file->content));
-	printf("str = %s\n", str);
-	// printf("buf = %s\n", file->content);
-	return (str);
+	free(ptr_buf);	
+	return (1);
+}
+
+void	strok_net(t_list **file, char *tmp)
+{
+	char	*buf;
+
+	buf = NULL;
+	if ((*file)->content == NULL)
+	{
+		buf = ft_strsub(tmp, 0, ft_strlen(tmp));
+		(*file)->content = buf;
+	}
+	else
+	{
+		buf = (*file)->content;
+		(*file)->content = ft_strjoin((*file)->content, tmp);
+		free(buf);
+	}	
 }
 
 int		get_next_line(const int fd, char **line)
@@ -69,23 +92,20 @@ int		get_next_line(const int fd, char **line)
 	int				i;
 
 	i = 0;
-	if (fd < 0 || BUFF_SIZE == 0)
-		return (0);
+	if (fd < 0 || line == NULL)
+		return (-1);
 	tmp = ft_strnew(BUFF_SIZE);
-	buf = ft_strnew(1);
+	buf = NULL;
 	file = searchlist(&file, fd);
-	// if (file->content != NULL)
-	// 	file->content = ft_strchr(btf, '\n');
-	while ( (i = read(fd, tmp, BUFF_SIZE)) > 0)
-	{
-		(file->content == NULL) ? buf = ft_strsub(tmp, 0, ft_strlen(tmp)) : buf;
-		(file->content == NULL) ? file->content = buf : buf;
-		buf = file->content;
-		file->content = ft_strjoin(file->content, tmp);
-		free(&buf[0]);
-	}
-	// find_line(file);
-	if ((*line = find_line(file)) == 0 && i <= 0)
+	if (file->content != NULL)
+		buf = ft_strchr(file->content, '\n');
+	while (!(ft_strchr(tmp, '\n')) && (i = read(fd, tmp, BUFF_SIZE)) > 0)
+		strok_net(&file, tmp);
+	if (i < 0)
+		return (-1);
+	if (ft_strlen(file->content) == 0)
+		return (0);
+	if (find_line(file, &(*line)) == 0 && i == 0)
 		return (0);
 	return (1);
 }
@@ -94,12 +114,17 @@ int main()
 {
 	int fp;
 	char *line;
-	// char b;
 	fp = open(FILE, O_RDONLY);
-	// while (get_next_line(fp, &line))
-		// printf("line %s\n", line);
-	get_next_line(fp, &line);
-	get_next_line(fp, &line);
+	printf("fp %d\n", fp);
+	while (get_next_line(0, &line))
+		printf("line %s\n", line);
+
+
+	// get_next_line(fp, &line);
+	// printf("line %s\n", line);
+	// get_next_line(fp, &line);
+	// printf("line %s\n", line);
+	// get_next_line(fp, &line);
 	// while (read(0, &b, 1))
 	// {
 	// 	get_next_line(fp, &line);

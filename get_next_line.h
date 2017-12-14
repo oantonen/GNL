@@ -15,9 +15,7 @@
 
 // #define BUFF_SIZE 32
 
-#include <stdlib.h>
 #include <fcntl.h>
-#include <unistd.h>
 
 typedef struct s_string
 {
