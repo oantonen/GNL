@@ -1,22 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.h                                    :+:      :+:    :+:   */
+/*   ft_toupper.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oantonen <oantonen@student.42.fr>          +#+  +:+       +#+        */
+/*   By: oantonen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/12/02 20:19:34 by oantonen          #+#    #+#             */
-/*   Updated: 2017/12/15 21:10:17 by oantonen         ###   ########.fr       */
+/*   Created: 2017/11/09 13:17:14 by oantonen          #+#    #+#             */
+/*   Updated: 2017/11/09 13:17:17 by oantonen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef GET_NEXT_LINE_H
-# define GET_NEXT_LINE_H
-
-# define BUFF_SIZE 8
-
-# include <fcntl.h>
-
-int		get_next_line(const int fd, char **line);
-
-#endif
+int		ft_toupper(int c)
+{
+	if (c >= 'a' && c <= 'z')
+		return (c - 32);
+	return (c);
+}

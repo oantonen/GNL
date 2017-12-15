@@ -1,22 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.h                                    :+:      :+:    :+:   */
+/*   ft_strcat.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: oantonen <oantonen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/12/02 20:19:34 by oantonen          #+#    #+#             */
-/*   Updated: 2017/12/15 21:10:17 by oantonen         ###   ########.fr       */
+/*   Created: 2017/11/06 19:48:03 by oantonen          #+#    #+#             */
+/*   Updated: 2017/11/15 19:08:38 by oantonen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef GET_NEXT_LINE_H
-# define GET_NEXT_LINE_H
+#include "libft.h"
 
-# define BUFF_SIZE 8
+char	*ft_strcat(char *s1, const char *s2)
+{
+	char	*ptr;
+	size_t	len;
 
-# include <fcntl.h>
-
-int		get_next_line(const int fd, char **line);
-
-#endif
+	ptr = s1;
+	len = ft_strlen(s2);
+	while (*ptr)
+		ptr++;
+	while (*s2)
+		*ptr++ = *s2++;
+	*ptr = '\0';
+	return (s1);
+}

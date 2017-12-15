@@ -1,22 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.h                                    :+:      :+:    :+:   */
+/*   ft_list_push_back.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: oantonen <oantonen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/12/02 20:19:34 by oantonen          #+#    #+#             */
-/*   Updated: 2017/12/15 21:10:17 by oantonen         ###   ########.fr       */
+/*   Created: 2017/11/21 21:19:45 by oantonen          #+#    #+#             */
+/*   Updated: 2017/11/23 14:41:31 by oantonen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef GET_NEXT_LINE_H
-# define GET_NEXT_LINE_H
+#include "libft.h"
 
-# define BUFF_SIZE 8
+void	ft_list_push_back(t_list **begin_list, t_list *new)
+{
+	t_list	*ptr;
 
-# include <fcntl.h>
-
-int		get_next_line(const int fd, char **line);
-
-#endif
+	ptr = NULL;
+	if (begin_list)
+	{
+		ptr = *begin_list;
+		while (ptr != NULL)
+			ptr = ptr->next;
+		ptr = new;
+	}
+}

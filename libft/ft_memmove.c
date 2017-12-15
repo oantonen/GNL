@@ -1,22 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.h                                    :+:      :+:    :+:   */
+/*   ft_memmove.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: oantonen <oantonen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/12/02 20:19:34 by oantonen          #+#    #+#             */
-/*   Updated: 2017/12/15 21:10:17 by oantonen         ###   ########.fr       */
+/*   Created: 2017/11/06 13:59:00 by oantonen          #+#    #+#             */
+/*   Updated: 2017/11/23 14:58:48 by oantonen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef GET_NEXT_LINE_H
-# define GET_NEXT_LINE_H
+#include "libft.h"
 
-# define BUFF_SIZE 8
+void	*ft_memmove(void *dst, const void *src, size_t len)
+{
+	unsigned char		*ptr1;
+	const unsigned char	*ptr2;
 
-# include <fcntl.h>
-
-int		get_next_line(const int fd, char **line);
-
-#endif
+	ptr1 = (unsigned char*)dst;
+	ptr2 = (const unsigned char*)src;
+	if (ptr1 > ptr2)
+		while (len--)
+			*(ptr1 + len) = *(ptr2 + len);
+	else
+		return (ft_memcpy(dst, src, len));
+	return (dst);
+}

@@ -6,12 +6,12 @@
 /*   By: oantonen <oantonen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/02 20:16:45 by oantonen          #+#    #+#             */
-/*   Updated: 2017/12/15 20:42:05 by oantonen         ###   ########.fr       */
+/*   Updated: 2017/12/15 21:06:48 by oantonen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-#include "libft.h"
+#include "libft/includes/libft.h"
 
 t_list	*searchlist(t_list **list, int fd)
 {

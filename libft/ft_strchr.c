@@ -1,22 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.h                                    :+:      :+:    :+:   */
+/*   ft_strchr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: oantonen <oantonen@student.42.fr>          +#+  +:+       +#+        */
+/*   By: oantonen <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/12/02 20:19:34 by oantonen          #+#    #+#             */
-/*   Updated: 2017/12/15 21:10:17 by oantonen         ###   ########.fr       */
+/*   Created: 2017/11/06 22:37:30 by oantonen          #+#    #+#             */
+/*   Updated: 2017/11/08 18:33:14 by oantonen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef GET_NEXT_LINE_H
-# define GET_NEXT_LINE_H
+#include "libft.h"
 
-# define BUFF_SIZE 8
-
-# include <fcntl.h>
-
-int		get_next_line(const int fd, char **line);
-
-#endif
+char	*ft_strchr(const char *s, int c)
+{
+	while (*s != (char)c && *s)
+		s++;
+	if (*s == (char)c)
+		return ((char*)s);
+	else if (*s == (char)c && !*s)
+		return ((char*)s);
+	return (NULL);
+}
