@@ -6,17 +6,12 @@
 /*   By: oantonen <oantonen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/02 20:16:45 by oantonen          #+#    #+#             */
-/*   Updated: 2017/12/11 19:55:13 by oantonen         ###   ########.fr       */
+/*   Updated: 2017/12/15 20:42:05 by oantonen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-#include <stdio.h>
-#include <string.h>
-#include "libft/includes/libft.h"
-
-#define BUFF_SIZE 500
-#define FILE "HEAD"
+#include "libft.h"
 
 t_list	*searchlist(t_list **list, int fd)
 {
@@ -30,7 +25,7 @@ t_list	*searchlist(t_list **list, int fd)
 		tmp = tmp->next;
 	}
 	if (tmp == NULL)
-	{	
+	{
 		tmp = ft_lstnew(NULL, 0);
 		tmp->content_size = fd;
 		ft_lstadd(&(*list), tmp);
@@ -40,7 +35,6 @@ t_list	*searchlist(t_list **list, int fd)
 
 int		find_line(t_list *file, char **line)
 {
-	// char	*str;
 	void	*ptr_buf;
 	int		len;
 	int		ost;
@@ -57,16 +51,15 @@ int		find_line(t_list *file, char **line)
 		return (1);
 	}
 	len = ptr_buf - file->content;
-
 	*line = ft_strsub(file->content, 0, len);
 	ptr_buf = file->content;
 	ost = ft_strlen(&(file->content)[len]);
-	file->content = ft_strsub(file->content, len + 1, ost);
-	free(ptr_buf);	
+	file->content = ft_strsub(ptr_buf, len + 1, ost);
+	free(ptr_buf);
 	return (1);
 }
 
-void	strok_net(t_list **file, char *tmp)
+int		sub_gnl(t_list **file, char *tmp)
 {
 	char	*buf;
 
@@ -81,58 +74,38 @@ void	strok_net(t_list **file, char *tmp)
 		buf = (*file)->content;
 		(*file)->content = ft_strjoin((*file)->content, tmp);
 		free(buf);
-	}	
+	}
+	if (ft_strchr(tmp, '\n') != NULL)
+	{
+		ft_bzero(tmp, BUFF_SIZE);
+		return (1);
+	}
+	ft_bzero(tmp, BUFF_SIZE);
+	return (0);
 }
 
 int		get_next_line(const int fd, char **line)
 {
 	static t_list	*file;
-	char			*buf;
+	t_list			*tmp_f;
 	char			*tmp;
 	int				i;
 
 	i = 0;
 	if (fd < 0 || line == NULL)
 		return (-1);
-	tmp = ft_strnew(BUFF_SIZE);
-	buf = NULL;
-	file = searchlist(&file, fd);
-	if (file->content != NULL)
-		buf = ft_strchr(file->content, '\n');
-	while (!(ft_strchr(tmp, '\n')) && (i = read(fd, tmp, BUFF_SIZE)) > 0)
-		strok_net(&file, tmp);
+	if (!(tmp = ft_strnew(BUFF_SIZE)))
+		return (0);
+	tmp_f = searchlist(&file, fd);
+	while ((i = read(fd, tmp, BUFF_SIZE)) > 0)
+		if (sub_gnl(&tmp_f, tmp) == 1)
+			break ;
+	ft_strdel(&tmp);
 	if (i < 0)
 		return (-1);
-	if (ft_strlen(file->content) == 0)
+	if (ft_strlen(tmp_f->content) == 0)
 		return (0);
-	if (find_line(file, &(*line)) == 0 && i == 0)
+	if (find_line(tmp_f, &(*line)) == 0 && i == 0)
 		return (0);
 	return (1);
 }
-
-int main()
-{
-	int fp;
-	char *line;
-	fp = open(FILE, O_RDONLY);
-	printf("fp %d\n", fp);
-	while (get_next_line(0, &line))
-		printf("line %s\n", line);
-
-
-	// get_next_line(fp, &line);
-	// printf("line %s\n", line);
-	// get_next_line(fp, &line);
-	// printf("line %s\n", line);
-	// get_next_line(fp, &line);
-	// while (read(0, &b, 1))
-	// {
-	// 	get_next_line(fp, &line);
-	// 	printf("line = %s\n", line);
-	// }
-
-	return (0);
-}
-
-
-
